@@ -167,7 +167,8 @@ Replace `<your-username>` and `<your-repo>` with your actual GitHub username and
 **Anuj Mundu**  
 MCA Student, MANIT Bhopal  
 Batch: 2023–2026
-License
+
+### License
 
 MIT License
 
