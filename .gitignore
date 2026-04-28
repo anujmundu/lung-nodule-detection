@@ -1,0 +1,42 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+.venv/
+venv/
+ENV/
+env/
+*.swp
+*~
+.ipynb_checkpoints/
+
+# Package distribution
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Data and experiment artifacts
+data/raw/
+detection_results/
+evaluation_results/
+visualization_results/
+runs/
+model_comparison_ct/
+
+# Large model files and archives
+*.zip
+*.tar.gz
+*.tar
+*.pth
+*.pt
+*.h5
+weights/
+
+# Nested git metadata
+**/.git
+
+# OS files
+.DS_Store
