@@ -1,0 +1,16 @@
+Classification Report:
+              precision    recall  f1-score   support
+
+      cancer       0.63      1.00      0.77       752
+   no_cancer       0.94      0.10      0.19       492
+
+    accuracy                           0.64      1244
+   macro avg       0.79      0.55      0.48      1244
+weighted avg       0.75      0.64      0.54      1244
+
+
+Confusion Matrix:
+[[749   3]
+ [441  51]]
+
+Overall Accuracy: 0.6431

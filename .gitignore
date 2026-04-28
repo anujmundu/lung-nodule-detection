@@ -20,6 +20,13 @@ dist/
 
 # Data and experiment artifacts
 data/raw/
+data/mri_dataset/
+data/mri_detection/
+data/mri_detection_synthetic/
+data/processed/
+data/processed_patches/
+data/x_nodule/
+models/yolov5/
 detection_results/
 evaluation_results/
 visualization_results/
