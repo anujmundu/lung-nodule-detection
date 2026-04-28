@@ -168,11 +168,7 @@ Replace `<your-username>` and `<your-repo>` with your actual GitHub username and
 MCA Student, MANIT Bhopal  
 Batch: 2023–2026
 
-### License
-
-MIT License
-
-Copyright (c) 2025 Anuj Mundu (MANIT Bhopal)
+Copyright (c) 2026 Anuj Mundu (MANIT Bhopal)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
