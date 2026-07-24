@@ -27,11 +27,6 @@ data/processed/
 data/processed_patches/
 data/x_nodule/
 models/yolov5/
-detection_results/
-evaluation_results/
-visualization_results/
-runs/
-model_comparison_ct/
 
 # Large model files and archives
 *.zip
