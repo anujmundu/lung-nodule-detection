@@ -1,168 +1,343 @@
-﻿# Medical Lung Nodule Detection
+﻿# Pneumonia Detection and Lung Region Segmentation using Deep Learning
 
-## Overview
+<p align="center">
 
-This repository contains tools, models, notebooks, and evaluation workflows for lung nodule detection across multiple imaging modalities.  
-The project covers:
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)]()
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-red.svg)]()
+[![YOLOv8](https://img.shields.io/badge/YOLO-v8-green.svg)]()
+[![U-Net](https://img.shields.io/badge/U--Net-Segmentation-orange.svg)]()
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.x-blue.svg)]()
+[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 
-- CT patch detection using the LUNA16 dataset  
-- Chest X‑ray detection using the X‑Nodule dataset  
-- Proof‑of‑concept synthetic MRI detection  
-- Model comparisons between YOLOv5‑CASP, YOLOv8, and Faster R‑CNN  
-- Analysis and visualization of detection performance and failure cases  
+</p>
 
-## Key Features
+---
 
-- Custom YOLOv5‑CASP architecture with attention (CBAM), multi‑scale context (ASPP), and transformer‑style (CoT3) enhancements  
-- Pretrained models for CT, X‑ray, and synthetic MRI detection  
-- End‑to‑end detection and evaluation notebooks  
-- Scripts for synthetic dataset generation and COCO conversion  
-- Visual analysis tools for performance comparison and error analysis  
+# Overview
 
-## Repository Structure
+This project presents an end-to-end deep learning framework for **automatic pneumonia analysis from Chest X-ray images**.
+
+The proposed system combines modern object detection and semantic segmentation techniques to assist radiologists in identifying pneumonia regions accurately.
+
+The framework consists of two complementary models:
+
+- **YOLOv8** for pneumonia localization (object detection)
+- **U-Net** for lung region segmentation
+
+Rather than relying on a single deep learning architecture, this research compares detection and segmentation performance to better understand the strengths and limitations of each approach in medical image analysis.
+
+The project is developed as part of the MCA Thesis at
+
+**Maulana Azad National Institute of Technology (MANIT), Bhopal**
+
+---
+
+# Objectives
+
+The objectives of this work are:
+
+- Detect pneumonia regions in Chest X-ray images
+- Segment lung regions accurately
+- Compare detection and segmentation approaches
+- Evaluate different deep learning architectures
+- Build a reproducible medical imaging pipeline
+- Provide visualization and quantitative evaluation
+
+---
+
+# Project Pipeline
 
 ```
-.
-├── data/                          # Dataset definitions, processed images/labels
-├── weights/                       # Trained model checkpoints
-├── models/yolov5/                 # Bundled YOLOv5 repository
-├── detection_results/             # Prediction outputs and visualizations
-├── evaluation_results/            # Plots and metrics
-├── notebooks/                     # Analysis notebooks
-├── src/                           # Custom modules (ASPP, attention, CoT, etc.)
-├── compare_models_detections.py   # Side-by-side model comparisons
-├── create_synthetic_mri_detection.py  # Synthetic MRI dataset generation
-├── convert_to_coco.py             # YOLO to COCO format conversion
-├── generate_advanced_visualizations.py
-├── generate_modality_comparison.py
-├── train_yolov8_casp.py           # YOLOv8 training pipeline
-├── train_faster_rcnn.py           # Faster R-CNN training script
-├── evaluate_mri_classifier.py     # MRI classifier evaluation
-├── detection_evaluation_complete.ipynb
-├── detection_evaluation.ipynb
-├── requirements.txt
-└── README.md
+                Chest X-ray Image
+                        │
+        ┌───────────────┴───────────────┐
+        │                               │
+        ▼                               ▼
+     YOLOv8                     U-Net Segmentation
+(Object Detection)           (Lung Segmentation)
+        │                               │
+        ▼                               ▼
+ Bounding Boxes                 Pixel-wise Masks
+        │                               │
+        └───────────────┬───────────────┘
+                        ▼
+                Performance Evaluation
+                        │
+                        ▼
+           Visualization & Comparative Study
 ```
 
+---
 
-## Requirements
+# Features
 
-- Python 3.9+ recommended  
-- Install core dependencies:
+- YOLOv8 based pneumonia detection
+- U-Net based lung segmentation
+- Automated preprocessing pipeline
+- Data augmentation
+- Training and validation scripts
+- Evaluation metrics
+- Inference utilities
+- Visualization notebooks
+- Modular project structure
+- Easy dataset integration
+
+---
+
+# Repository Structure
+
+```text
+MEDICAL_LUNG_NODULE_DETECTION/
+│
+├── data/                                   # Datasets and processed data
+│
+├── detection_results/                      # Detection outputs
+│
+├── evaluation_results/                     # Evaluation metrics and reports
+│
+├── models/                                 # Model architectures and YOLOv5 repository
+│
+├── model_comparison_ct/                    # CT model comparison outputs
+│
+├── notebooks/                              # Jupyter notebooks
+│
+├── runs/                                   # YOLO training runs
+│
+├── src/                                    # Custom source modules
+│
+├── visualization_results/                  # Generated plots and visualizations
+│
+├── weights/                                # Pretrained model weights
+│
+├── compare_models_detections.py            # Compare model predictions
+├── convert_to_coco.py                      # Convert annotations to COCO format
+├── create_synthetic_mri_detection.py       # Generate synthetic MRI detection dataset
+├── custom_modules.py                       # Custom deep learning modules
+├── detect.py                               # Detection entry point
+├── detection_evaluation.ipynb              # Detection evaluation notebook
+├── detection_evaluation_complete.ipynb     # Complete evaluation workflow
+├── environment.yml                         # Conda environment configuration
+├── evaluate_mri_classifier.py              # MRI classifier evaluation
+├── fix_paths.py                            # Dataset path correction utility
+├── fix_paths_absolute.py                   # Absolute path correction utility
+├── generate_advanced_visualizations.py     # Advanced visualization generation
+├── generate_all_plots.py                   # Generate all evaluation plots
+├── generate_modality_comparison.py         # Cross-modality comparison
+├── generate_mri_synthetic_figure.py        # MRI synthetic visualization
+├── preprocess_luna16.py                    # LUNA16 preprocessing
+├── preprocess_luna16_patches.py            # CT patch generation
+├── requirements.txt                        # Python dependencies
+├── train.py                                # General training entry point
+├── train_faster_rcnn.py                    # Faster R-CNN training
+├── train_yolov8_casp.py                    # YOLOv8-CASP training
+├── visualize_detections.py                 # Detection visualization
+├── yolov8s_casp.yaml                       # YOLOv8-CASP configuration
+├── README.md
+└── .gitignore
+```
+
+---
+
+# Technologies Used
+
+- Python
+- PyTorch
+- Ultralytics YOLOv8
+- OpenCV
+- NumPy
+- Pandas
+- Matplotlib
+- Albumentations
+- scikit-image
+- scikit-learn
+- tqdm
+
+---
+
+# Datasets
+Due to size and licensing, datasets are not stored in this repository.  
+Download them from the following sources and place them under `data/`:
+
+- [LUNA16 CT dataset](https://luna16.grand-challenge.org/) → `data/raw/` and `data/processed_patches/`
+- [X‑Nodule chest X‑ray dataset](link) → `data/x_nodule/`
+- Synthetic MRI dataset (provided via [Google Drive](link)) → `data/mri_detection_synthetic/`
+
+Ensure the folder structure matches the repository layout before running scripts.
+
+
+## Detection Dataset
+
+Chest X-ray Pneumonia Dataset
+
+Contains:
+
+- Pneumonia
+- Normal
+
+Used for:
+
+- YOLOv8 Training
+
+---
+
+## Segmentation Dataset
+
+Montgomery + Shenzhen Chest X-ray Dataset
+
+Contains:
+
+- Chest X-ray Images
+- Ground Truth Lung Masks
+
+Used for:
+
+- U-Net Training
+
+---
+
+# Dataset Directory
+
+```
+dataset/
+
+├── detection/
+│      ├── train/
+│      ├── valid/
+│      └── test/
+│
+├── segmentation/
+│      ├── images/
+│      └── masks/
+```
+
+---
+
+# Installation
+
+Clone the repository
 
 ```bash
-python -m venv .venv
-# On Windows:
-.venv\Scripts\Activate.ps1
-# On macOS/Linux:
-# source .venv/bin/activate
+git clone https://github.com/<username>/medical-object-detection.git
 
+cd medical-object-detection
+```
+
+Create virtual environment
+
+```bash
+python -m venv medod
+```
+
+Windows
+
+```bash
+medod\Scripts\activate
+```
+
+Linux/macOS
+
+```bash
+source medod/bin/activate
+```
+
+Install dependencies
+
+```bash
 pip install -r requirements.txt
-pip install -r models/yolov5/requirements.txt
 ```
 
-## Usage
+---
 
-### Detection Evaluation
+# Training
 
-Open and run the following Jupyter notebooks:
-
-- `detection_evaluation_complete.ipynb` – Full pipeline with all modalities
-- `detection_evaluation.ipynb` – Focused evaluation workflow
-
-These notebooks perform detection, evaluation, and generate key visualizations for CT, X-ray, and synthetic MRI.
-
-### Run YOLOv5 Detection (X-Ray)
+## Train YOLOv8
 
 ```bash
-python detect.py \
-  --weights ../../weights/casp_x_nodule_best.pt \
-  --img 640 \
-  --conf 0.25 \
-  --source ../../data/x_nodule/test/images \
-  --save-txt \
-  --save-conf \
-  --project ../../detection_results \
-  --name xray_casp
+python scripts/train_yolo.py
 ```
 
-### Run CT Patch Detection
+---
+
+## Train U-Net
 
 ```bash
-cd models/yolov5
-python detect.py \
-  --weights ../../weights/casp_patches_best.pt \
-  --img 256 \
-  --conf 0.25 \
-  --source ../../data/processed_patches/images \
-  --save-txt \
-  --save-conf \
-  --project ../../detection_results \
-  --name ct_casp \
-  --nosave
+python scripts/train_unet.py
 ```
 
-### Run Synthetic MRI Detection
+---
+
+# Inference
 
 ```bash
-cd models/yolov5
-python detect.py \
-  --weights ../../weights/casp_mri_synthetic_best.pt \
-  --img 640 \
-  --conf 0.25 \
-  --source ../../data/mri_synthetic/val/images \
-  --save-txt \
-  --save-conf \
-  --project ../../detection_results \
-  --name mri_synthetic \
-  --exist-ok
+python scripts/inference.py
 ```
 
-### Create Synthetic MRI Detection Dataset
+---
+
+# Evaluation
 
 ```bash
-python create_synthetic_mri_detection.py
+python scripts/evaluate.py
 ```
 
-### Convert YOLO Labels to COCO
+---
 
-```bash
-python convert_to_coco.py
-```
+# Evaluation Metrics
 
-## Notes
+For Detection
 
-- The main inference code lives inside `models/yolov5/`, which is a cloned YOLOv5 repository.
-- Some top-level helper scripts rely on dataset paths under `data/`.
-- Use the notebooks and visualization scripts to reproduce evaluation figures.
-- Large datasets and model weights are excluded from version control (see `.gitignore`).
+- mAP@0.5
+- Precision
+- Recall
+- F1 Score
 
-## GitHub Push Instructions
+For Segmentation
 
-1. **Initialize the repository** (if not already done):
+- Dice Coefficient
+- IoU
+- Precision
+- Recall
 
-```bash
-git init
-```
+---
 
-2. **Add all files and commit**:
+# Results
 
-```bash
-git add .
-git commit -m "Initial commit: lung nodule detection project"
-```
+The framework evaluates
 
-3. **Create a repository on GitHub** (do not add README or .gitignore during creation). Then add the remote and push:
+- Detection accuracy
+- Segmentation quality
+- Localization performance
+- Failure cases
+- Comparative analysis
 
-```bash
-git remote add origin https://github.com/<your-username>/<your-repo>.git
-git branch -M main
-git push -u origin main
-```
+Visual outputs include
 
-Replace `<your-username>` and `<your-repo>` with your actual GitHub username and repository name.
+- Bounding box predictions
+- Segmentation masks
+- Overlay visualizations
+- Metric plots
 
-## Author
+---
+
+# Future Improvements
+
+Potential extensions include:
+
+- Attention U-Net
+- YOLO11
+- Swin Transformer
+- SAM-assisted segmentation
+- Multi-class thoracic disease detection
+- Explainable AI (Grad-CAM)
+- Clinical deployment pipeline
+
+---
+
+# Thesis Information
+
+**Title**
+
+> Pneumonia Detection and Lung Region Segmentation f
 
 **Anuj Mundu**  
 MCA Student, MANIT Bhopal  
@@ -170,12 +345,65 @@ Batch: 2023–2026
 
 Copyright (c) 2026 Anuj Mundu (MANIT Bhopal)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+# Future Improvements
+
+Potential extensions include:
+
+- Attention U-Net
+- YOLO11
+- Swin Transformer
+- SAM-assisted segmentation
+- Multi-class thoracic disease detection
+- Explainable AI (Grad-CAM)
+- Clinical deployment pipeline
+
+---
+
+# Thesis Information
+
+**Title**
+
+> Pneumonia Detection and Lung Region Segmentation from Chest X-ray Images using Deep Learning
+
+**Degree**
+
+Master of Computer Applications (MCA)
+
+**Institute**
+
+Maulana Azad National Institute of Technology (MANIT), Bhopal
+
+Batch
+
+2023–2026
+
+---
+
+# Author
+
+**Anuj Mundu**
+
+MCA Student
+
+Maulana Azad National Institute of Technology (MANIT), Bhopal
+
+GitHub:
+https://github.com/<username>
+
+LinkedIn:
+https://linkedin.com/in/<username>
+
+---
+
+# License
+
+MIT License
+
+Copyright (c) 2026 Anuj Mundu
+
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software.
+
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
@@ -187,3 +415,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
+
