@@ -1,0 +1,18 @@
+Image,Failure Type,Best IoU,Ground Truth Count,Prediction Count,Description
+00018003_002.jpg,False Negative,0.0,1,0,Very small nodule (3 px)
+00019643_013.jpg,False Negative,0.0,1,0,Low contrast + small
+00019682_000.jpg,False Negative,0.0,1,0,Subpleural + small
+00022065_010.jpg,False Negative,0.0,1,0,Rib overlap
+00024313_002.jpg,False Negative,0.0,1,0,Very small nodule (3 px)
+00025448_001.jpg,False Negative,0.0,1,0,Boundary location
+00004523_012.jpg,Misaligned,0.422,1,1,Irregular shape + Spiculated
+00008008_021.jpg,Misaligned,0.384,1,1,Boundary location
+00008897_002.jpg,Misaligned,0.449,1,1,Spiculated nodule
+00010980_000.jpg,Misaligned,0.354,1,1,Boundary + subpleural
+00012973_008.jpg,Misaligned,0.412,1,1,Boundary + rib overlap
+00014274_008.jpg,Misaligned,0.391,1,1,Low contrast
+00015268_000.jpg,Misaligned,0.36,1,1,Small size + Boundary
+00015507_002.jpg,Misaligned,0.44,1,1,Irregular shape
+00021086_008.jpg,Misaligned,0.4,1,1,Boundary location
+00026478_003.jpg,Misaligned,0.43,1,1,Irregular shape + Spiculated
+00026545_000.jpg,Misaligned,0.37,1,1,Boundary + subpleural
