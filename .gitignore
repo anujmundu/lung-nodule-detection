@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches & Logs
+*.cache
+*.log
+logs/
+
+# Large Datasets (Following dataset storage policy)
+data/x_nodule/
+data/nih_chestxray/
+data/processed_patches/
+data/mri_detection_synthetic/
+data/raw/
+*.mhd
+*.raw
+*.tar.gz
+*.zip
+
+# Training run weight checkpoints (Keep only best weights in Detection Results)
+yolov5/runs/
+runs/
+
+# Environments & IDEs
+.env
+.venv
+env/
+venv/
+.idea/
+.vscode/
+*.swp

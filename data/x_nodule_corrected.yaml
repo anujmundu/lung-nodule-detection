@@ -1,0 +1,6 @@
+path: data/x_nodule
+train: train/images
+val: valid/images
+test: test/images
+nc: 1
+names: ['nodule']

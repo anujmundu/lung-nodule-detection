@@ -1,0 +1,6 @@
+path: D:/MEDICAL_LUNG_NODULE_DETECTION/data/processed_patches 
+train: train.txt 
+val: val.txt 
+test: test.txt 
+nc: 1 
+names: ['nodule'] 

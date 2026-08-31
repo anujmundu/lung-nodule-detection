@@ -1,0 +1,6 @@
+path: C:/Users/anujm/Desktop/Lung Nodule Detection/data/processed_patches
+train: train.txt
+val: val.txt
+test: test.txt
+nc: 1
+names: ['nodule']

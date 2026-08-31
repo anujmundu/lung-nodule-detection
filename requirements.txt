@@ -1,0 +1,9 @@
+torch
+torchvision
+torchaudio
+opencv-python==4.9.0
+numpy==1.26.4
+matplotlib==3.10.8
+pandas==2.3.3
+albumentations==1.0.0
+ultralytics==8.4.34

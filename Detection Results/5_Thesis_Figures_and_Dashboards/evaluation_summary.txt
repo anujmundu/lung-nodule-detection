@@ -1,0 +1,26 @@
+================================================================================
+YOLOv5-CASP: MASTER EVALUATION & PERFORMANCE SUMMARY
+================================================================================
+
+1. BEST MODEL PERFORMANCE (X-Nodule Chest X-Ray):
+--------------------------------------------------
+  mAP@0.5:           0.809  (State-of-the-Art Benchmark)
+  Precision:         0.792  (79.2%)
+  Recall:            0.708  (70.8%)
+  F1 Score:          0.748  @ 0.32 confidence threshold
+  Parameters:        19.4M
+  GFLOPs:            25.7
+  Inference Speed:   70.98 FPS (RTX 3050 GPU CUDA)
+
+2. NIH CHESTX-RAY 14 CLINICAL COHORT BENCHMARK (100 Epochs):
+------------------------------------------------------------
+  mAP@0.5:           0.644  (+1211% vs scratch training 0.0491)
+  Precision:         0.627  (+746x vs scratch training 0.00084)
+  Recall:            0.677  (67.7% Sensitivity)
+  F1 Score:          0.651  (65.1%)
+  mAP@0.5:0.95:      0.431  (+2321% vs scratch training 0.0178)
+
+3. LUNA16 CT PATCHES BENCHMARK:
+--------------------------------------------------
+  mAP@0.5:           0.382  (+79% vs Baseline YOLOv5s 0.214)
+... (see EVALUATION_SUMMARY.md for full report)

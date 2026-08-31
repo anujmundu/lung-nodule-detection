@@ -1,0 +1,5 @@
+path: C:/Users/anujm/Desktop/Lung Nodule Detection/data/mri_detection_synthetic
+train: images/train
+val: images/val
+nc: 1
+names: ['nodule']
