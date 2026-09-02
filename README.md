@@ -297,10 +297,21 @@ Lung Nodule Detection/
 │   │   ├── yolov5s-cbam.yaml               # CBAM ablation model architecture YAML
 │   │   └── yolov5s-cot3.yaml               # CoT3 ablation model architecture YAML
 │   └── runs/train/                         # Model training checkpoints & metric logs
+├── tests/                                  # Automated PyTest test suite (9/9 passed)
+│   ├── test_model.py                       # Attention tensor shapes & model checkpoint load tests
+│   └── test_api.py                         # FastAPI endpoint integration & payload tests
+├── sample_images/                          # Preloaded clinical benchmark test scans
+├── .github/workflows/                      # CI/CD pipelines
+│   └── ci.yml                              # Automated GitHub Actions PyTest verification
+├── app.py                                  # PulmoScan-CASP Clinical PACS CADx Workstation (Streamlit)
+├── app_api.py                              # Production FastAPI Asynchronous REST API Service
+├── export_onnx.py                          # Standalone ONNX Model Exporter & Inference Runtime
+├── Dockerfile                              # Multi-stage production container definition
+├── docker-compose.yml                      # Container orchestration for Web & API services
 ├── custom_modules.py                       # Standalone PyTorch module exports
 ├── detect.py                               # Model inference & bounding box detection script
 ├── generate_all_plots.py                   # Master visualization generator (30 outputs)
-├── README.md                               # Project documentation
+├── README.md                               # Comprehensive project documentation & benchmarks
 ├── requirements.txt                        # Python dependencies manifest
 ├── train_all_ablation_models.py            # Automated ablation suite execution script
 └── train_casp.py                           # Core SGD training execution wrapper
@@ -561,6 +572,128 @@ $$\text{mAP@[0.5:0.95]} = \frac{1}{10} \sum_{k=0}^{9} \text{mAP@}(0.50 + 0.05k)$
 
 ---
 
+# 🏥 PulmoScan-CASP | Clinical PACS CADx Workstation & Deployment Suite
+
+In addition to the core PyTorch training pipeline, this repository provides a **100% free, production-ready Clinical AI deployment suite** tailored for point-of-care thoracic triage, hospital PACS integration, and asynchronous REST inference.
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                        🫁 PULMOSCAN-CASP | CLINICAL PACS CADx WORKSTATION               │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ PATIENT: DOE, JOHN R. (MRN-2026-9812A) | DEMO: 58Y / MALE | ACC: ACC-8831094 | DATE...│
+├──────────────────────────────────────────┬─────────────────────────────────────────────┤
+│ 📷 PACS Original Viewport (Windowed)     │ 🎯 CADx Analytical Overlay (Heatmap+Calipers)│
+│ • CLAHE Micro-Lesion Contrast Filter     │ • Saliency Attention Map (JET Colormap)     │
+│ • Bone/Calcification Inversion           │ • Bounding Box & Centroid Crosshair Caliper │
+│ • Edge & Detail Sharpening               │ • Nodule ID + Diameter mm + Confidence Tag  │
+├──────────────────────────────────────────┴─────────────────────────────────────────────┤
+│ 📊 Diagnostic CAD Telemetry: Count | Dominant Diameter (mm) | Peak Conf % | Latency ms  │
+│ 🛡️ Clinical Assessment: Lung-RADS™ Category 1 / 2 / 3 / 4A / 4B (Malignancy Risk & Action)│
+│ 📋 Morphometry Table: Nodule # | Est. Diameter (mm) | Anatomical Zone (e.g. RUL-Apical)│
+│ 🗂️ Master Study Registry: Session Worklist tracking all evaluated cases with CSV export │
+│ 📄 Export: Formatted Official PDF Radiology Report, Structured PACS JSON, & PNG Overlay │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🌟 1. Interactive Streamlit Radiologist CAD Workstation (`app.py`)
+
+The **PulmoScan-CASP** dashboard provides a dark slate PACS hospital theme with real-world clinical decision support:
+
+- **Model Switcher**: Instant switching between **X-Nodule SOTA** ($640\times 640$, $0.809$ mAP), **NIH ChestX-ray 14** ($640\times 640$, $0.644$ mAP), and **LUNA16 CT** ($256\times 256$, $0.382$ mAP).
+- **Patient Demographics & Intake**: Customizable patient metadata (Name, MRN ID, Age, Gender, Accession #, Study Date, Referring Physician) with dedicated **JSON** and **TXT** metadata record download buttons.
+- **Radiology Windowing Presets**: Live filters including Standard Radiograph, CLAHE Micro-Lesion Enhancement, Bone/Calcification Inversion, and Edge Sharpening.
+- **Visual Overlays**: Gaussian attention saliency heatmaps with adjustable opacity ($10\%\text{--}80\%$) and precision centroid crosshairs calibrated to metric scale ($0.18\text{ mm/px}$).
+- **Automated Lung-RADS™ Risk Stratification**: Automatic classification into Categories 1, 2, 3, 4A, or 4B with clinical follow-up recommendations.
+- **Anatomical Zone Mapping**: Automated localization to pulmonary lobes (*Right Upper Lobe Apical*, *Right Middle Lobe*, *Left Lower Lobe Basilar*, etc.).
+- **Official PDF Radiology Report Generator**: Built with ReportLab, producing printable letterhead reports with patient tables, CADx findings narratives, and radiologist sign-off sections.
+- **Session-Wide Master Patient Registry**: Centralized examination table tracking all evaluated patients during the session with 1-click **Master CSV** and **Batch JSON** downloads.
+
+```bash
+# Launch Interactive Clinical PACS Workstation:
+streamlit run app.py
+```
+
+---
+
+## ⚡ 2. Production FastAPI Asynchronous REST API (`app_api.py`)
+
+High-throughput, non-blocking asynchronous REST API designed for microservices and clinical PACS integration:
+
+- **`GET /health`**: Live system telemetry (CUDA availability, GPU memory, active device, loaded model cache).
+- **`GET /v1/models`**: Registry of available checkpoints, architectures, and benchmark metrics.
+- **`POST /v1/predict`**: Multipart image endpoint returning validated Pydantic JSON with bounding box coordinates, normalized centers, estimated diameters, and latency in milliseconds.
+- **`POST /v1/predict/visual`**: Returns annotated PNG image directly with drawn bounding boxes.
+- **Interactive OpenAPI Documentation**: Accessible at `http://127.0.0.1:8000/docs` (Swagger UI) and `/redoc`.
+
+```bash
+# Launch FastAPI REST Server:
+uvicorn app_api:app --reload --port 8000
+```
+
+---
+
+## 🚀 3. Standalone ONNX Model Exporter & Runtime (`export_onnx.py`)
+
+Serializes PyTorch weights into optimized ONNX graph representations with dynamic batch dimensions:
+
+- Exports `.pt` checkpoints to `.onnx` with constant folding and graph verification.
+- Includes `ONNXNoduleDetector` class providing lightweight inference with **zero PyTorch runtime dependency**.
+
+```bash
+# Export PyTorch weights to ONNX:
+python export_onnx.py --weights "Detection Results/1_YOLOv5_CASP_X_Nodule_SOTA/weights/best.pt" --output yolov5s_casp.onnx --imgsz 640
+```
+
+---
+
+## 🧪 4. Automated PyTest Test Suite (`tests/`)
+
+Comprehensive automated testing covering custom attention tensor dynamics, checkpoint loading, and REST API contracts:
+
+- **`tests/test_model.py`**: Unit tests verifying CBAM channel/spatial attention dimensions, ASPP parallel dilated convolutions, CoT3 dynamic transformer matrices, and full checkpoint unpickling.
+- **`tests/test_api.py`**: Integration tests verifying `/health`, `/v1/models`, and `/v1/predict` payloads with synthetic DICOM-scale images.
+- **Cross-Platform Compatibility**: Universal `pathlib` monkey-patching ensuring Windows-trained weights instantiate seamlessly on Linux and Docker.
+- **Result**: **9 / 9 Tests PASSED (100% Pass Rate)**.
+
+```bash
+# Execute Automated Test Suite:
+pytest tests/ -v
+```
+
+---
+
+## 🐳 5. Containerization & CI/CD Orchestration
+
+- **`Dockerfile`**: Multi-stage production container with non-root security user (`appuser`).
+- **`docker-compose.yml`**: One-click orchestration running FastAPI on port `8000` and Streamlit on port `8501`.
+- **`.github/workflows/ci.yml`**: Automated GitHub Actions CI workflow executing the PyTest test suite on every push to `main`.
+
+```bash
+# Launch Entire Containerized Stack:
+docker-compose up --build
+```
+
+---
+
+## ☁️ 6. Free 1-Click Cloud Deployment Guide
+
+You can deploy this workstation for **100% Free** with a public URL:
+
+### Deploying on Streamlit Community Cloud (Recommended):
+1. Go to **[share.streamlit.io](https://share.streamlit.io)** and log in with GitHub.
+2. Click **"Create app"** ➔ **"I already have an app"**.
+3. Select Repository: `anujmundu/lung-nodule-detection`, Branch: `main`, Main file path: `app.py`.
+4. Click **"Deploy!"** — Your live URL will be ready in under 2 minutes.
+
+### Deploying on Hugging Face Spaces:
+1. Go to **[huggingface.co/spaces](https://huggingface.co/spaces)** and create a new Space.
+2. Select SDK: **Streamlit**, Hardware: **Free CPU (16GB RAM)**.
+3. Connect your GitHub repository `anujmundu/lung-nodule-detection`.
+
+---
+
 # 📖 Thesis Documentation
 
 Comprehensive chapter-by-chapter documentation extracted from the MCA thesis:
@@ -608,5 +741,7 @@ Distributed under the **MIT License**. See `LICENSE` for details.
 
 - **Author**: Anuj Mundu  
 - **Email**: anujmark.edwin.ame@gmail.com  
+- **Year**: 2026  
 - **Institution**: Maulana Azad National Institute of Technology (MANIT), Bhopal, India  
-- **Repository**: [github.com/anujmundu/Lung-Nodule-Detection](https://github.com/anujmundu)
+- **Repository**: [github.com/anujmundu/Lung-Nodule-Detection](https://github.com/anujmundu/Lung-Nodule-Detection)
+
