@@ -580,6 +580,48 @@ patient_info = {
     "ref_md": pt_ref,
 }
 
+    st.markdown("---")
+    m_d1, m_d2 = st.columns(2)
+    with m_d1:
+        meta_json_str = json.dumps(
+            {
+                "record_type": "PACS_Patient_Demographics_Metadata",
+                "export_timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "patient_metadata": patient_info,
+            },
+            indent=2,
+        )
+        st.download_button(
+            label="💾 Download Patient Metadata (JSON)",
+            data=meta_json_str,
+            file_name=f"Patient_Metadata_{patient_info['pid']}.json",
+            mime="application/json",
+            key="dl_meta_json_btn",
+        )
+    with m_d2:
+        meta_txt_str = f"""================================================================================
+PATIENT INTAKE & THORACIC EXAM METADATA RECORD
+PulmoScan-CASP CADx Clinical Workstation
+================================================================================
+Export Timestamp    : {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+Patient Full Name   : {patient_info['name']}
+Medical Record #    : {patient_info['pid']}
+Age / Gender        : {patient_info['age']} Years / {patient_info['gender']}
+Accession Number    : {patient_info['acc']}
+Study Modality      : {patient_info['modality']}
+Examination Date    : {patient_info['date']}
+Referring Physician : {patient_info['ref_md']}
+CAD Architecture    : YOLOv5-CASP (CBAM + ASPP + CoT3 Attention)
+================================================================================
+"""
+        st.download_button(
+            label="📄 Download Intake Metadata (TXT)",
+            data=meta_txt_str,
+            file_name=f"Patient_Metadata_{patient_info['pid']}.txt",
+            mime="text/plain",
+            key="dl_meta_txt_btn",
+        )
+
 # Display PACS Demographics Top Bar
 st.markdown(
     f"""
