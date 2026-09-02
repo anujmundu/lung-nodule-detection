@@ -534,7 +534,7 @@ st.sidebar.markdown(
     **Project Attribution:**
     - **Author:** Anuj Mundu
     - **Email:** `anujmark.edwin.ame@gmail.com`
-    - **Year:** 2025
+    - **Year:** 2026
     """
 )
 
@@ -771,17 +771,16 @@ else:
 # ==============================================================================
 # FOOTER - AUTHOR & SYSTEM CREDITS
 # ==============================================================================
-st.markdown("---")
 st.markdown(
     """
-    <div style="text-align: center; color: #94a3b8; font-size: 0.88rem; padding: 18px 0 10px 0; border-top: 1px solid #1e293b;">
+    <div style="text-align: center; color: #94a3b8; font-size: 0.88rem; margin-top: 80px; padding: 24px 0 16px 0; border-top: 1px solid #1e293b;">
         <p style="margin-bottom: 5px; font-weight: 700; color: #e2e8f0; font-size: 0.95rem;">
             🫁 <b>PulmoScan-CASP</b> • Automated Pulmonary Nodule CADx Workstation
         </p>
         <p style="margin-bottom: 3px; color: #cbd5e1;">
             <b>Author:</b> <span style="color: #38bdf8; font-weight: 600;">Anuj Mundu</span> &nbsp;•&nbsp; 
             <b>Email:</b> <a href="mailto:anujmark.edwin.ame@gmail.com" style="color: #38bdf8; text-decoration: none; font-weight: 600;">anujmark.edwin.ame@gmail.com</a> &nbsp;•&nbsp; 
-            <b>Year:</b> <span style="color: #38bdf8; font-weight: 600;">2025</span>
+            <b>Year:</b> <span style="color: #38bdf8; font-weight: 600;">2026</span>
         </p>
         <p style="font-size: 0.78rem; color: #64748b; margin-top: 4px;">
             Enhanced YOLOv5-CASP Deep Learning Framework (CBAM • ASPP • CoT3 Attention)
