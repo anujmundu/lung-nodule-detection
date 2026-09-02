@@ -567,18 +567,16 @@ with st.expander("👤 Patient & Exam Demographics (Click to edit metadata)", ex
         pt_mod = st.text_input("Study Modality", value=model_cfg["modality"])
     with c_p4:
         pt_date = st.text_input("Study Date", value=datetime.date.today().strftime("%Y-%m-%d"))
-        pt_ref = st.text_input("Referring Physician", value="Dr. S. Jenkins, MD")
-
-patient_info = {
-    "name": pt_name,
-    "pid": pt_id,
-    "age": pt_age,
-    "gender": pt_gender,
-    "acc": pt_acc,
-    "modality": pt_mod,
-    "date": pt_date,
-    "ref_md": pt_ref,
-}
+    patient_info = {
+        "name": pt_name,
+        "pid": pt_id,
+        "age": pt_age,
+        "gender": pt_gender,
+        "acc": pt_acc,
+        "modality": pt_mod,
+        "date": pt_date,
+        "ref_md": pt_ref,
+    }
 
     st.markdown("---")
     m_d1, m_d2 = st.columns(2)
