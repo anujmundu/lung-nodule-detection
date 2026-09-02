@@ -708,6 +708,36 @@ if input_pil is not None and weights_file is not None:
         unsafe_allow_html=True,
     )
 
+    # Record examination in Master PACS Study Registry
+    study_record = {
+        "Exam Timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "Patient ID": patient_info["pid"],
+        "Patient Name": patient_info["name"],
+        "Age": patient_info["age"],
+        "Gender": patient_info["gender"],
+        "Accession #": patient_info["acc"],
+        "Modality": patient_info["modality"],
+        "Referring Physician": patient_info["ref_md"],
+        "Nodule Count": len(detections),
+        "Max Diameter (mm)": round(max_diam, 1),
+        "Peak Confidence": f"{max_conf * 100:.1f}%",
+        "Lung-RADS Category": lung_rads_assessment["tier"],
+        "Latency (ms)": round(latency, 1),
+    }
+
+    # Update or append record in session state
+    if "study_registry" not in st.session_state:
+        st.session_state.study_registry = []
+
+    match_idx = next(
+        (i for i, r in enumerate(st.session_state.study_registry) if r["Patient ID"] == study_record["Patient ID"] and r["Accession #"] == study_record["Accession #"]),
+        None,
+    )
+    if match_idx is not None:
+        st.session_state.study_registry[match_idx] = study_record
+    else:
+        st.session_state.study_registry.append(study_record)
+
     # Detailed Morphometric Table
     if detections:
         st.markdown("### 📋 Nodule Morphometry & Anatomical Mapping Table")
@@ -762,6 +792,50 @@ if input_pil is not None and weights_file is not None:
             )
     else:
         st.success("✅ Negative Scan: No pulmonary lesions detected above threshold. Standard follow-up protocol applies.")
+
+        # Download report for negative scan as well
+        neg_col1, neg_col2 = st.columns(2)
+        with neg_col1:
+            pdf_bytes = generate_radiology_pdf(
+                patient_data=patient_info,
+                model_name=selected_model_name,
+                detections=[],
+                lung_rads=lung_rads_assessment,
+                latency_ms=latency,
+                annotated_img_rgb=annotated_result,
+            )
+            st.download_button(
+                label="📄 Download Negative PDF Radiology Report",
+                data=pdf_bytes,
+                file_name=f"Radiology_Report_{patient_info['pid']}_Negative.pdf",
+                mime="application/pdf",
+            )
+
+# Master PACS Patient Worklist & Cohort Registry (Session-Wide)
+if "study_registry" in st.session_state and st.session_state.study_registry:
+    st.markdown("---")
+    with st.expander(f"🗂️ Master PACS Patient Worklist & Registry ({len(st.session_state.study_registry)} Examined Cases)", expanded=True):
+        st.caption("Centralized examination log tracking all analyzed patients, demographic parameters, CAD localization scores, and Lung-RADS risk categories.")
+        df_reg = pd.DataFrame(st.session_state.study_registry)
+        st.dataframe(df_reg, use_container_width=True)
+
+        w_col1, w_col2 = st.columns(2)
+        with w_col1:
+            csv_bytes = df_reg.to_csv(index=False).encode("utf-8")
+            st.download_button(
+                label="📥 Download Complete Patient Registry (CSV)",
+                data=csv_bytes,
+                file_name="PACS_Master_Patient_Registry.csv",
+                mime="text/csv",
+            )
+        with w_col2:
+            batch_json = json.dumps(st.session_state.study_registry, indent=2)
+            st.download_button(
+                label="💾 Download Complete Cohort History (JSON)",
+                data=batch_json,
+                file_name="PACS_Master_Cohort_History.json",
+                mime="application/json",
+            )
 
 elif weights_file is None:
     st.error("Model weights file could not be located in Detection Results. Please verify best.pt paths.")
