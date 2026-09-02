@@ -529,6 +529,14 @@ if sample_files:
 
 st.sidebar.markdown("---")
 st.sidebar.caption(f"**Hardware Engine:** {'CUDA GPU (' + torch.cuda.get_device_name(0) + ')' if torch.cuda.is_available() else 'CPU OpenMP Runtime'}")
+st.sidebar.markdown(
+    """
+    **Project Attribution:**
+    - **Author:** Anuj Mundu
+    - **Email:** `anujmark.edwin.ame@gmail.com`
+    - **Year:** 2025
+    """
+)
 
 # ==============================================================================
 # MAIN VIEWPORT - RADIOLOGY WORKSTATION
@@ -559,7 +567,7 @@ with st.expander("👤 Patient & Exam Demographics (Click to edit metadata)", ex
         pt_mod = st.text_input("Study Modality", value=model_cfg["modality"])
     with c_p4:
         pt_date = st.text_input("Study Date", value=datetime.date.today().strftime("%Y-%m-%d"))
-        pt_ref = st.text_input("Referring Physician / AI Investigator", value="Dr. A. Mundu, Lead AI Investigator")
+        pt_ref = st.text_input("Referring Physician", value="Dr. S. Jenkins, MD")
 
 patient_info = {
     "name": pt_name,
@@ -759,3 +767,26 @@ elif weights_file is None:
     st.error("Model weights file could not be located in Detection Results. Please verify best.pt paths.")
 else:
     st.info("👋 Ingest a thoracic image scan above or choose a preloaded benchmark case from the left sidebar to initialize the clinical CADx analysis.")
+
+# ==============================================================================
+# FOOTER - AUTHOR & SYSTEM CREDITS
+# ==============================================================================
+st.markdown("---")
+st.markdown(
+    """
+    <div style="text-align: center; color: #94a3b8; font-size: 0.88rem; padding: 18px 0 10px 0; border-top: 1px solid #1e293b;">
+        <p style="margin-bottom: 5px; font-weight: 700; color: #e2e8f0; font-size: 0.95rem;">
+            🫁 <b>PulmoScan-CASP</b> • Automated Pulmonary Nodule CADx Workstation
+        </p>
+        <p style="margin-bottom: 3px; color: #cbd5e1;">
+            <b>Author:</b> <span style="color: #38bdf8; font-weight: 600;">Anuj Mundu</span> &nbsp;•&nbsp; 
+            <b>Email:</b> <a href="mailto:anujmark.edwin.ame@gmail.com" style="color: #38bdf8; text-decoration: none; font-weight: 600;">anujmark.edwin.ame@gmail.com</a> &nbsp;•&nbsp; 
+            <b>Year:</b> <span style="color: #38bdf8; font-weight: 600;">2025</span>
+        </p>
+        <p style="font-size: 0.78rem; color: #64748b; margin-top: 4px;">
+            Enhanced YOLOv5-CASP Deep Learning Framework (CBAM • ASPP • CoT3 Attention)
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
